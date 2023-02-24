@@ -2,7 +2,7 @@
 
 <launch>
 
-  <include file="$(find mavros)/launch/px4.launch"/>
-  <node name="teleop_remap" pkg="mavros_teleop" type="teleop_remap" output="screen" />
+  <include file="$(find mavros)/launch/apm.launch"/>
+  <node name="teleop_remap" pkg="mavros_teleop" type="mavros_teleop" output="screen" />
 
 </launch>

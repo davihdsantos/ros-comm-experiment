@@ -87,8 +87,8 @@ public:
     ros::NodeHandle private_nh("~");
 
     private_nh.param<int>("x_axis", axes_.x.axis, 5);
-    private_nh.param<int>("y_axis", axes_.y.axis, 4);
-    private_nh.param<int>("z_axis", axes_.z.axis, 2);
+    private_nh.param<int>("y_axis", axes_.y.axis, -2);
+    private_nh.param<int>("z_axis", axes_.z.axis, -1);
     private_nh.param<int>("thrust_axis", axes_.thrust.axis, -3);
     private_nh.param<int>("yaw_axis", axes_.yaw.axis, 1);
 
@@ -101,12 +101,14 @@ public:
     private_nh.param<double>("slow_factor", slow_factor_, 0.2);
 
     private_nh.param<double>("pitch_max", axes_.x.factor, 30.0);
-    private_nh.param<double>("y_max", axes_.y.factor, 1000.0);
-    private_nh.param<double>("y_offset", axes_.y.offset, 1000.0);
-    private_nh.param<double>("z_max", axes_.z.factor, 1000.0);
-    private_nh.param<double>("z_offset", axes_.z.offset, 1000.0);
+    private_nh.param<double>("y_max", axes_.y.factor, 500.0);
+    private_nh.param<double>("y_offset", axes_.y.offset, 1500.0);
+    private_nh.param<double>("z_max", axes_.z.factor, -500.0);
+    private_nh.param<double>("z_offset", axes_.z.offset, 1500.0);
     private_nh.param<double>("thrust_max", axes_.thrust.factor, 30.0);
-    //private_nh.param<double>("thrust_offset", axes_.thrust.offset, 30.0);
+    private_nh.param<double>("thrust_offset", axes_.thrust.offset, 30.0);
+    private_nh.param<double>("yaw_max", axes_.yaw.factor, 30.0);
+    private_nh.param<double>("yaw_offset", axes_.yaw.offset, 30.0);
 
     joy_subscriber_ = node_handle_.subscribe<sensor_msgs::Joy>("joy", 1,
                                                                boost::bind(&Teleop::joyAttitudeCallback, this, _1));
@@ -126,9 +128,9 @@ public:
     mavros_msgs::OverrideRCIn joint_cmd;
     double rudder, sail;
 
-    joint_cmd.channels[0] = (getAxis(joy, axes_.z));
+    joint_cmd.channels[0] = (getAxis(joy, axes_.yaw));
     joint_cmd.channels[1] = (getAxis(joy, axes_.z));
-    joint_cmd.channels[2] = (getAxis(joy, axes_.y));
+    joint_cmd.channels[2] = (getAxis(joy, axes_.thrust));
     joint_cmd.channels[3] = (getAxis(joy, axes_.z));
     joint_cmd.channels[4] = (getAxis(joy, axes_.z));
     joint_cmd.channels[5] = (getAxis(joy, axes_.z));
